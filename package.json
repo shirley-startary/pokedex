@@ -1,0 +1,23 @@
+{
+  "name": "demo-pokedex-ajax",
+  "version": "1.0.0",
+  "description": "probando XMLHttpRequest con JS",
+  "main": "serve.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(\u001b[2~https://github.com/si7v4n4/pokedex.git)"
+  },
+  "keywords": [
+    "js",
+    "xhr",
+    "json"
+  ],
+  "author": "Shirley Silvana Suarez Startary <shirley.startary@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
