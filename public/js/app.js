@@ -1,11 +1,11 @@
-$.getJSON("http://pokeapi.co/api/v2/pokemon/",
+$.getJSON("https://pokeapi.co/api/v2/pokemon/",
 	function (response) {
 	var pokemons = response.results;
   console.log(pokemons);
 	crearPokemones(pokemons);
 });
 
-$.getJSON("http://pokeapi.co/api/v2/pokemon-species/1/",
+$.getJSON("https://pokeapi.co/api/v2/pokemon-species/1/",
 	function (response) {
     console.log(response);
     console.log(response.color.name);
