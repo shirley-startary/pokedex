@@ -1,10 +1,27 @@
 $(document).on("click",".cerrarModalPokemon",cerrarModalPokemon);
-$.getJSON("https://pokeapi.co/api/v2/pokemon/",
-	function (response) {
-	var pokemons = response.results;
-	crearPokemones(pokemons);
-});
+var url = "https://pokeapi.co/api/v2/pokemon/";
+// $(document).on("click","#next",pokeNext);
+apipokemones(url);
 
+// function pokeNext(){
+// 	console.log(url);
+// 	apipokemones(url);
+// }
+
+function apipokemones(url){
+	$.getJSON(url,
+	function (response) {
+		// console.log(response);
+		var pokemons = response.results;
+		var next = response.next;
+		console.log(next);
+		$("#next").click(function(){
+			$("#listaPokemones").html("");
+			apipokemones(next);
+		});
+		crearPokemones(pokemons);
+	});
+}
 
 function abrir(nombre,imagen,url){
 		$.getJSON(url,
@@ -57,13 +74,14 @@ function mostrarModal(obj){
 	obj.css("visibility", "visible");
 }
 
+var contador=1;
 function crearPokemones (pokemones){
-	var contador=1;
 	var contenedor = document.getElementById("listaPokemones")
 	var row = document.createElement("div");
 	row.classList.add("row");
-
+	console.log(pokemones);
 	pokemones.forEach(function(pokemon){
+
 		var url = "https://pokeapi.co/api/v2/pokemon-species/"+contador+"/" ;
 
 		// Creando los elementos pokemones del DOM
@@ -72,6 +90,7 @@ function crearPokemones (pokemones){
 		var img = document.createElement("img");
 		var tituloPokemon = document.createElement("h3");
 		var urlimagen="assets/img/"+contador+".png";
+		// console.log(urlimagen);
 		var nombrePokemon=pokemon.name;
 		img.src=urlimagen;
 
