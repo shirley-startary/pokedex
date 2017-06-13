@@ -1,9 +1,27 @@
-$.getJSON("https://pokeapi.co/api/v2/pokemon/",
-	function (response) {
-	var pokemons = response.results;
-	crearPokemones(pokemons);
-});
+$(document).on("click",".cerrarModalPokemon",cerrarModalPokemon);
+var url = "https://pokeapi.co/api/v2/pokemon/";
+// $(document).on("click","#next",pokeNext);
+apipokemones(url);
 
+// function pokeNext(){
+// 	console.log(url);
+// 	apipokemones(url);
+// }
+
+function apipokemones(url){
+	$.getJSON(url,
+	function (response) {
+		// console.log(response);
+		var pokemons = response.results;
+		var next = response.next;
+		console.log(next);
+		$("#next").click(function(){
+			$("#listaPokemones").html("");
+			apipokemones(next);
+		});
+		crearPokemones(pokemons);
+	});
+}
 
 function abrir(nombre,imagen,url){
 		$.getJSON(url,
@@ -13,45 +31,57 @@ function abrir(nombre,imagen,url){
 			});
 }
 
+var plantillaModal =
+'<div class="modalPokemon row" id="modal">'+
+        '<span class="cerrarModalPokemon" id="cerrar">__cerrar__</span>'+
+        '<h3 id="tituloPokemon" class="col-xs-12 text-center text-uppercase">__nombrePokemon__</h3>'+
+        '<div class="col-xs-12">'+
+        '<img src="__imagen__" id="_imagen" class="col-xs-12 col-md-4">'+
+          '<div class="col-xs-12 col-md-4 text-capitalize">'+
+          	'<p id="color"><strong>Color:</strong>__color__</p>'+
+            '<p id="shape"><strong>Shape:</strong>__shape__</p>'+
+          '</div>'+
+          '<div class="col-xs-12 col-md-4 text-capitalize">'+
+            '<p id="habitat"><strong>Habitat:</strong>__habitat__</p>'+
+            '<p id="genera"><strong>Genera:</strong>__genera__</p>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+
 // en esta funcion se extructura todo el modal
 function crearModal(nombre,imagen,response){
-	var fondo=document.getElementById("fondo");
-	var modal=document.getElementById("modal");
-	var cerrar=document.getElementById("cerrar");
-	var tituloPokemon = document.getElementById("tituloPokemon");
-	var imagenDom=document.getElementById("_imagen");
-	var color = document.getElementById("color");
-	var shape = document.getElementById("shape");
-	var habitat = document.getElementById("habitat");
-	var genera = document.getElementById("genera");
-	//console.log(fondo);
+	var $infoModal = $("#fondo");
+	$infoModal.html(
+		plantillaModal.replace("__cerrar__","x")
+		.replace("__nombrePokemon__",nombre)
+									.replace("__imagen__",imagen)
+									.replace("__color__",response.color.name)
+									.replace("__shape__",response.shape.name)
+									.replace("__habitat__",response.habitat.name)
+									.replace("__genera__",response.genera[0].genus)
+	);
+	return $infoModal;
+}
 
-	tituloPokemon.textContent = nombre
-	imagenDom.src=imagen;
-	color.textContent = "Color: "+response.color.name;
-	shape.textContent = "Shape: "+response.shape.name;
-	habitat.textContent = "Habitat: "+response.habitat.name;
-	genera.textContent = "Genera: "+response.genera[0].genus;
-
-	cerrar.innerText="X";
-	cerrar.addEventListener("click",function(){
-		fondo.style.visibility="hidden";
-	});
-	return fondo;
+function cerrarModalPokemon(){
+	var $fondo=$("#fondo");
+	$fondo.css("visibility","hidden");
 }
 
 // en esta funcion visualiza el modal
 function mostrarModal(obj){
-	obj.style.visibility="visible";
+	console.log(obj);
+	obj.css("visibility", "visible");
 }
 
+var contador=1;
 function crearPokemones (pokemones){
-	var contador=1;
 	var contenedor = document.getElementById("listaPokemones")
 	var row = document.createElement("div");
 	row.classList.add("row");
-
+	console.log(pokemones);
 	pokemones.forEach(function(pokemon){
+
 		var url = "https://pokeapi.co/api/v2/pokemon-species/"+contador+"/" ;
 
 		// Creando los elementos pokemones del DOM
@@ -60,6 +90,7 @@ function crearPokemones (pokemones){
 		var img = document.createElement("img");
 		var tituloPokemon = document.createElement("h3");
 		var urlimagen="assets/img/"+contador+".png";
+		// console.log(urlimagen);
 		var nombrePokemon=pokemon.name;
 		img.src=urlimagen;
 
